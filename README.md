@@ -1,22 +1,30 @@
 # MySQL Task
 
 ## -- To create the ecommerce database:
-
+```sql
 >CREATE DATABASE ecommerce;
+```
 
+```sql
 >USE ecommerce;
-
+```
 
 ## -- To create the customers table with id, name, email, and address:
 
+
+```sql
 > CREATE TABLE customers (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     address VARCHAR(255)
 );
+```
+
 
 ## -- Create orders table
+
+
 > CREATE TABLE orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     customer_id INT,
