@@ -24,7 +24,7 @@
 
 ## -- Create orders table
 
-
+```sql
 > CREATE TABLE orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     customer_id INT,
@@ -32,7 +32,10 @@
     total_amount DECIMAL(10, 2),
     FOREIGN KEY (customer_id) REFERENCES customers(id)
 );
+```
 
+
+```sql
 ## -- Create products table
 > CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -40,10 +43,13 @@
     price DECIMAL(10, 2),
     description TEXT
 );
-
+```
 
 ## -- Insert sample data into customers table 
 
+
+
+```sql
 > INSERT INTO customers (name, email, address) VALUES
 ('Edward Torphy', 'Idella_Koss@gmail.com', 'Gary'),
 ('Dana Lakin', 'Callie_Mante92@gmail.com', 'San Ramon'),
@@ -75,9 +81,12 @@
 ('Dustin Runolfsdottir IV', 'Amelie.Cummerata@gmail.com', 'Clarksville'),
 ('Dr. Tracy Schaden', 'Claud_Anderson@gmail.com', 'Tarynchester'),
 ('Miss Juana Sanford', 'Carmela14@gmail.com', 'Rebecaville');
-
+```
 
 ## -- Insert sample data into products table (30 products)
+
+
+```sql
 > INSERT INTO products (name, price, description) VALUES
 INSERT INTO products (name, price, description) VALUES
 ('Product A', 25.00, 'Durable home appliance'),
@@ -106,8 +115,11 @@ INSERT INTO products (name, price, description) VALUES
 ('Product X', 100.00, 'Smart light bulbs, pack of 4'),
 ('Product Y', 65.00, 'Advanced fitness tracker watch'),
 ('Product Z', 120.00, 'Robot vacuum cleaner with app control');
+```
 
 
+
+```sql
 > INSERT INTO orders (customer_id, order_date, total_amount) VALUES
  (12, CURDATE() - INTERVAL 25 DAY, 980.00),
 (27, CURDATE() - INTERVAL 30 DAY, 637.00),
@@ -139,9 +151,13 @@ INSERT INTO products (name, price, description) VALUES
 (13, CURDATE() - INTERVAL 40 DAY, 129.00),
 (6, CURDATE() - INTERVAL 16 DAY, 84.00),
 (10, CURDATE() - INTERVAL 4 DAY, 135.00);
-
+```
 
 ## -- Insert sample data into order_items table (normalized item-level details per order)
+
+
+
+```sql
 > CREATE TABLE order_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT,
@@ -150,9 +166,12 @@ INSERT INTO products (name, price, description) VALUES
     FOREIGN KEY (order_id) REFERENCES orders(id),
     FOREIGN KEY (product_id) REFERENCES products(id)
 );
-
+```
 
 ## -- Insert data into order_items to reference items in each order
+
+
+```sql
 > INSERT INTO order_items (order_id, product_id, quantity) VALUES
 (12,15,5),
 (17,12,4),
@@ -167,71 +186,96 @@ INSERT INTO products (name, price, description) VALUES
 (8,6,2),
 (2,2,2),
 (6,4,3);
-
+```
 
 ## -- Queries for the e-commerce system:
 
 ### -- 1. Retrieve all customers who have placed an order in the last 30 days.
+
+
+
+```sql
 > SELECT DISTINCT customers.name
 FROM customers
 JOIN orders ON customers.id = orders.customer_id
 WHERE orders.order_date >= CURDATE() - INTERVAL 30 DAY;
-
+```
 
 ### -- 2. Get the total amount of all orders placed by each customer.
+
+
+
+```sql
 > SELECT customers.name, SUM(orders.total_amount) AS total_spent
 FROM customers
 JOIN orders ON customers.id = orders.customer_id
 GROUP BY customers.name;
-
+```
 
 
 ### -- 3. Update the price of Product C to 45.00.
+
+
+```sql
 > UPDATE products
 SET price = 45.00
 WHERE name = 'Product C';
-
+```
 
 ### -- 4. Add a new column `discount` to the products table.
+
+
+```sql
 > ALTER TABLE products
 ADD COLUMN discount DECIMAL(5, 2) DEFAULT 0.00;
-
+```
 
 ### -- 5. Retrieve the top 3 products with the highest price.
+
+```sql
 > SELECT name, price
 FROM products
 ORDER BY price DESC
 LIMIT 3;
-
+```
 
 ### -- 6. Get the names of customers who have ordered Product A.
+
+
+```sql
 > SELECT DISTINCT customers.name
 FROM customers
 JOIN orders ON customers.id = orders.customer_id
 JOIN order_items ON orders.id = order_items.order_id
 JOIN products ON order_items.product_id = products.id
 WHERE products.name = 'Product A';
-
+```
 
 
 ### -- 7. Join the orders and customers tables to retrieve the customer's name and order date for each order.
+
+```sql
 > SELECT customers.name, orders.order_date
 FROM customers
 JOIN orders ON customers.id = orders.customer_id;
-
+```
 
 ### -- 8. Retrieve the orders with a total amount greater than 150.00.
+
+```sql
 > SELECT *
 FROM orders
 WHERE total_amount > 150.00;
-
+```
 
 ### -- 9. The `order_items` table was created earlier to normalize the data by storing items for each order, allowing a many-to-many relationship between `orders` and `products`.
 
 
 ### -- 10. Retrieve the average total of all orders.
+
+```sql
 > SELECT AVG(total_amount) AS average_order_total
 FROM orders;
-
+```
 
 
