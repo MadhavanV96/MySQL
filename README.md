@@ -1,23 +1,23 @@
-#MySQL Task
+# MySQL Task
 
--- To create the ecommerce database:
+## -- To create the ecommerce database:
 
-CREATE DATABASE ecommerce;
+>CREATE DATABASE ecommerce;
 
-USE ecommerce;
+>USE ecommerce;
 
 
--- To create the customers table with id, name, email, and address:
+## -- To create the customers table with id, name, email, and address:
 
-CREATE TABLE customers (
+> CREATE TABLE customers (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     address VARCHAR(255)
 );
 
--- Create orders table
-CREATE TABLE orders (
+## -- Create orders table
+> CREATE TABLE orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     customer_id INT,
     order_date DATE,
@@ -25,8 +25,8 @@ CREATE TABLE orders (
     FOREIGN KEY (customer_id) REFERENCES customers(id)
 );
 
--- Create products table
-CREATE TABLE products (
+## -- Create products table
+> CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     price DECIMAL(10, 2),
@@ -34,9 +34,9 @@ CREATE TABLE products (
 );
 
 
--- Insert sample data into customers table 
+## -- Insert sample data into customers table 
 
-INSERT INTO customers (name, email, address) VALUES
+> INSERT INTO customers (name, email, address) VALUES
 ('Edward Torphy', 'Idella_Koss@gmail.com', 'Gary'),
 ('Dana Lakin', 'Callie_Mante92@gmail.com', 'San Ramon'),
 ('Henry Smitham', 'Antwon.Gusikowski3@yahoo.com', 'Tillmanbury'),
@@ -69,8 +69,8 @@ INSERT INTO customers (name, email, address) VALUES
 ('Miss Juana Sanford', 'Carmela14@gmail.com', 'Rebecaville');
 
 
--- Insert sample data into products table (30 products)
-INSERT INTO products (name, price, description) VALUES
+## -- Insert sample data into products table (30 products)
+> INSERT INTO products (name, price, description) VALUES
 INSERT INTO products (name, price, description) VALUES
 ('Product A', 25.00, 'Durable home appliance'),
 ('Product B', 30.00, 'Latest tech gadget'),
@@ -100,7 +100,7 @@ INSERT INTO products (name, price, description) VALUES
 ('Product Z', 120.00, 'Robot vacuum cleaner with app control');
 
 
-INSERT INTO orders (customer_id, order_date, total_amount) VALUES
+> INSERT INTO orders (customer_id, order_date, total_amount) VALUES
  (12, CURDATE() - INTERVAL 25 DAY, 980.00),
 (27, CURDATE() - INTERVAL 30 DAY, 637.00),
 (17, CURDATE() - INTERVAL 34 DAY, 237.00),
@@ -133,8 +133,8 @@ INSERT INTO orders (customer_id, order_date, total_amount) VALUES
 (10, CURDATE() - INTERVAL 4 DAY, 135.00);
 
 
--- Insert sample data into order_items table (normalized item-level details per order)
-CREATE TABLE order_items (
+## -- Insert sample data into order_items table (normalized item-level details per order)
+> CREATE TABLE order_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT,
     product_id INT,
@@ -144,8 +144,8 @@ CREATE TABLE order_items (
 );
 
 
--- Insert data into order_items to reference items in each order
-INSERT INTO order_items (order_id, product_id, quantity) VALUES
+## -- Insert data into order_items to reference items in each order
+> INSERT INTO order_items (order_id, product_id, quantity) VALUES
 (12,15,5),
 (17,12,4),
 (6,4,3),
@@ -161,43 +161,43 @@ INSERT INTO order_items (order_id, product_id, quantity) VALUES
 (6,4,3);
 
 
--- Queries for the e-commerce system:
+## -- Queries for the e-commerce system:
 
--- 1. Retrieve all customers who have placed an order in the last 30 days.
-SELECT DISTINCT customers.name
+### -- 1. Retrieve all customers who have placed an order in the last 30 days.
+> SELECT DISTINCT customers.name
 FROM customers
 JOIN orders ON customers.id = orders.customer_id
 WHERE orders.order_date >= CURDATE() - INTERVAL 30 DAY;
 
 
--- 2. Get the total amount of all orders placed by each customer.
-SELECT customers.name, SUM(orders.total_amount) AS total_spent
+### -- 2. Get the total amount of all orders placed by each customer.
+> SELECT customers.name, SUM(orders.total_amount) AS total_spent
 FROM customers
 JOIN orders ON customers.id = orders.customer_id
 GROUP BY customers.name;
 
 
 
--- 3. Update the price of Product C to 45.00.
-UPDATE products
+### -- 3. Update the price of Product C to 45.00.
+> UPDATE products
 SET price = 45.00
 WHERE name = 'Product C';
 
 
--- 4. Add a new column `discount` to the products table.
-ALTER TABLE products
+### -- 4. Add a new column `discount` to the products table.
+> ALTER TABLE products
 ADD COLUMN discount DECIMAL(5, 2) DEFAULT 0.00;
 
 
--- 5. Retrieve the top 3 products with the highest price.
-SELECT name, price
+### -- 5. Retrieve the top 3 products with the highest price.
+> SELECT name, price
 FROM products
 ORDER BY price DESC
 LIMIT 3;
 
 
--- 6. Get the names of customers who have ordered Product A.
-SELECT DISTINCT customers.name
+### -- 6. Get the names of customers who have ordered Product A.
+> SELECT DISTINCT customers.name
 FROM customers
 JOIN orders ON customers.id = orders.customer_id
 JOIN order_items ON orders.id = order_items.order_id
@@ -206,23 +206,23 @@ WHERE products.name = 'Product A';
 
 
 
--- 7. Join the orders and customers tables to retrieve the customer's name and order date for each order.
-SELECT customers.name, orders.order_date
+### -- 7. Join the orders and customers tables to retrieve the customer's name and order date for each order.
+> SELECT customers.name, orders.order_date
 FROM customers
 JOIN orders ON customers.id = orders.customer_id;
 
 
--- 8. Retrieve the orders with a total amount greater than 150.00.
-SELECT *
+### -- 8. Retrieve the orders with a total amount greater than 150.00.
+> SELECT *
 FROM orders
 WHERE total_amount > 150.00;
 
 
--- 9. The `order_items` table was created earlier to normalize the data by storing items for each order, allowing a many-to-many relationship between `orders` and `products`.
+### -- 9. The `order_items` table was created earlier to normalize the data by storing items for each order, allowing a many-to-many relationship between `orders` and `products`.
 
 
--- 10. Retrieve the average total of all orders.
-SELECT AVG(total_amount) AS average_order_total
+### -- 10. Retrieve the average total of all orders.
+> SELECT AVG(total_amount) AS average_order_total
 FROM orders;
 
 
