@@ -2,9 +2,9 @@
 
 ## -- To create the ecommerce database:
 
->CREATE DATABASE ecommerce;
+>'CREATE DATABASE ecommerce;
 
->USE ecommerce;
+>USE ecommerce;'
 
 
 ## -- To create the customers table with id, name, email, and address:
